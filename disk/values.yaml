@@ -1,0 +1,37 @@
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  ingressClassName: public
+  tls: false
+  hosts:
+    - host: disk.local
+  annotations:
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+
+components:
+  backend:
+    image:
+      repository: ikcap/disk_backend
+      tag: 2749214f9fd15994a5b5dfe37b8e2287b6b58120
+      pullPolicy: IfNotPresent
+  ui:
+    enabled: true
+    image:
+      repository: ikcap/disk_frontend
+      tag: b476f2dbe7672d833cbc9d27d31e69f2962da02b
+      pullPolicy: IfNotPresent
+
+
+persistence:
+  enabled: true
+  storageClass: ''
+  accessModes:
+    - ReadWriteOnce
+  size: 10Gi
+  dataSource: {}
+  existingClaim: ''
+  selector: {}
+  annotations:
+    helm.sh/resource-policy: keep

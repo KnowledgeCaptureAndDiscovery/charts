@@ -1,0 +1,83 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "disk.prefix" . }}-backend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: "http"
+      port: 80
+      targetPort: 8080
+      {{ if eq .Values.service.type "NodePort" }}
+      nodePort: {{ include "helm.backend_node_port" . }}
+      {{ end }}
+      protocol: TCP
+  selector:
+    app: {{ include "disk.prefix" . }}-backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "disk.prefix" . }}-backend
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "disk.prefix" . }}-backend
+  template:
+    metadata:
+      labels:
+        app: {{ include "disk.prefix" . }}-backend
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "disk.prefix" . }}-backend-config-map
+        - name: data 
+          {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            {{- if .Values.persistence.existingClaim }}
+            claimName: {{ .Values.persistence.existingClaim }}
+            {{- else }}
+            claimName: {{ include "disk.prefix" . }}-backend
+            {{- end }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+      containers:
+        - name: backend
+          {{- with .Values.components.backend  }}
+          image: "{{ .image.repository }}:{{ .image.tag | default $.Chart.AppVersion }}"
+          imagePullPolicy: {{ .image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /root/.disk/
+            - name: data 
+              mountPath: /root/disk/
+          livenessProbe:
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            httpGet:
+              path: /disk-server/vocabulary
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /disk-server/vocabulary
+              port: http
+
+            {{- end }}

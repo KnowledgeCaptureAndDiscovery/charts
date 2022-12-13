@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "disk.prefix" . }}-backend-config-map
+  namespace: {{ .Release.Namespace }}
+data:
+  server.properties: | 
+    {
+        server = http://localhost:8080/disk-server;
+        storage = 
+        {
+            local = /root/disk/storage;
+            tdb = /root/disk/storage/TDB;
+            db = /root/disk/storage/DB;
+        }
+        keycloak =
+        {
+            url = https://auth.disk.isi.edu;
+            realm = production;
+        }
+        data-adapters =
+        {
+            Linked_Earth =
+            {
+                type = graphdb;
+                endpoint = https://linkedearth.graphdb.disk.isi.edu/;
+                repository = LiPDVerse;
+                username = admin;
+                password = 4dm1n!23;
+                description = "The [LinkedEarth platform](https://wiki.linked.earth/Main_Page) contains observational paleoclimate data stored in the [LiPD format](https://lipd.net/). These datasets consist of paleoclimate measurements (such as tree ring width, the isotopic composition of ice, bulk composition of marine and lake sediments) as a proxy for past environmental variables such as temperature and precipitation. [Click here for more information about LinkedEarth](http://linked.earth/). ";
+            }
+        }
+        method-adapters =
+        {
+            auto_ts = {
+                type = wings;
+                endpoint = https://datascience4all.org/wings-portal-new;
+                username = dkhider;
+                password = dkhider123;
+                internal_server = http://datascience4all.org/wings-portal-new;
+                domain = ClimateDisk;
+            }
+        }
+        question-templates =
+        {
+            climate = https://raw.githubusercontent.com/KnowledgeCaptureAndDiscovery/QuestionOntology/main/development/ClimateQuestions.owl;
+        }
+        vocabularies =
+        {
+        }
+    }
+
