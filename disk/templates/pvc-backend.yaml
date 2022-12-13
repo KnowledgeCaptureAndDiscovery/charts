@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "disk.prefix" . }}-backend-data
+  name: {{ include "disk.prefix" . }}-backend
   namespace: {{ .Release.Namespace | quote }}
   {{- if or .Values.persistence.annotations .Values.commonAnnotations }}
   annotations:

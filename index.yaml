@@ -3,12 +3,22 @@ entries:
   disk:
   - apiVersion: v2
     appVersion: 1.16.1
-    created: "2022-12-13T09:33:18.453665077-03:00"
+    created: "2022-12-13T10:11:21.876886403-03:00"
     description: A Helm chart for DISK project
-    digest: ef1ac2f8b85793f0913566bdf03864323ba1365cfdff3587b87d9ad67c279ce0
+    digest: 40cd864bcdd5d6fd0634578f9cc16d4a30e7601a6c8f7f2d334def0951558fd8
+    name: disk
+    type: application
+    urls:
+    - https://knowledgecaptureanddiscovery.github.io/charts/charts/disk-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2022-12-13T10:11:21.876468554-03:00"
+    description: A Helm chart for DISK project
+    digest: 47493e414f7bf7d6cd8216b4823dcd80c8546f9f5d1e39d34cb1ff0cf5a529a4
     name: disk
     type: application
     urls:
     - https://knowledgecaptureanddiscovery.github.io/charts/charts/disk-0.0.1.tgz
     version: 0.0.1
-generated: "2022-12-13T09:33:18.449806055-03:00"
+generated: "2022-12-13T10:11:21.875907313-03:00"
