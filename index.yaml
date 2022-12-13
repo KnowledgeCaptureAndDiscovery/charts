@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  disk:
+  - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2022-12-13T09:33:18.453665077-03:00"
+    description: A Helm chart for DISK project
+    digest: ef1ac2f8b85793f0913566bdf03864323ba1365cfdff3587b87d9ad67c279ce0
+    name: disk
+    type: application
+    urls:
+    - https://knowledgecaptureanddiscovery.github.io/charts/charts/disk-0.0.1.tgz
+    version: 0.0.1
+generated: "2022-12-13T09:33:18.449806055-03:00"
